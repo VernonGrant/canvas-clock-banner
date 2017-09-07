@@ -1,0 +1,22 @@
+{
+    "name": "canvas-watch-banner",
+    "version": "1.0.0",
+    "description": "HTML5 canvas based watch banner",
+    "main": "index.js",
+    "scripts": {
+        "start": "live-server ./",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/VernonGrant/canvas-watch-banner.git"
+    },
+    "author": "Vernon Grant <vernon-grant@outlook.com>",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/VernonGrant/canvas-watch-banner/issues"
+    },
+    "homepage": "https://github.com/VernonGrant/canvas-watch-banner#readme",
+    "devDependencies": {
+    }
+}

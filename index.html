@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--IE compatibility mode setting-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Canvas Watch Example</title>
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="public/js/indexIE.bundle.js"></script>
+        <![endif]-->
+        <style>
+
+         body {
+             background: #eeeeee;
+         }
+
+         #box {
+             background: white;
+             border: 1px solid #dddddd;
+             height: 300px;
+             margin: 0 auto;
+             width: 300px;
+         }
+
+        </style>
+    </head>
+
+    <body>
+
+        <div id="box" >
+            <canvas id="watch-canvas" width="300" height="300" style="border:1px solid #000000;"></canvas>
+            <div style="display:none;">
+                <img id="dial" src="assets/dial.png" width="300" height="300">
+                <img id="dial-point-a" src="assets/dial-point-a.png" width="50" height="50">
+                <img id="dial-point-b" src="assets/dial-point-b.png" width="50" height="50">
+                <img id="hours-hand" src="assets/hours.png" width="200" height="200">
+                <img id="minutes-hand" src="assets/minutes.png" width="200" height="200">
+                <img id="seconds-hand" src="assets/seconds.png" width="200" height="200">
+            </div>
+        </div>
+
+        <script>
+
+         function getCenterPixel(length, offset = 0){
+             return Math.round(length / 2) + offset;
+         }
+
+         var settings = {
+             debug: false,
+             updateInterval: 1000,
+             canvas: document.getElementById("watch-canvas")
+         };
+
+         var canvasContext = settings.canvas.getContext("2d");
+
+         var dail = {
+             width: 300,
+             height: 300,
+             centerPointHours: {
+                 x: getCenterPixel(300, -14),
+                 y: getCenterPixel(300, -7)
+             },
+             centerPointMinutes: {
+                 x: getCenterPixel(300, -14),
+                 y: getCenterPixel(300, -7)
+             },
+             centerPointSeconds: {
+                 x: getCenterPixel(300, -14),
+                 y: getCenterPixel(300, 41)
+             },
+             image: document.getElementById("dial"),
+             imagePointA: document.getElementById("dial-point-a"),
+             imagePointB: document.getElementById("dial-point-b")
+         };
+
+         var hourHand = {
+             width: 85,
+             height: 85,
+             centerPoint: {
+                 x: getCenterPixel(85, -1),
+                 y: getCenterPixel(85, 23)
+             },
+             image: document.getElementById("hours-hand")
+         };
+
+         var minuteHand = {
+             width: 120,
+             height: 120,
+             centerPoint: {
+                 x: getCenterPixel(120, -1),
+                 y: getCenterPixel(120, 41)
+             },
+             image: document.getElementById("minutes-hand")
+         };
+
+         var secondHand = {
+             width: 40,
+             height: 40,
+             centerPoint: {
+                 x: getCenterPixel(40),
+                 y: getCenterPixel(40, 11)
+             },
+             image: document.getElementById("seconds-hand")
+         };
+
+         function drawDail()
+         {
+             canvasContext.save();
+             canvasContext.drawImage(dail.image, 0, 0, dail.width, dail.height);
+             canvasContext.restore();
+         }
+
+         function drawPointA()
+         {
+             if(settings.debug == false){
+                 canvasContext.save();
+                 canvasContext.drawImage(
+                     dail.imagePointA,
+                     dail.centerPointMinutes.x - 3,
+                     dail.centerPointMinutes.y - 3,
+                     6,
+                     6
+                 );
+                 canvasContext.restore();
+             }
+         }
+
+         function drawPointB()
+         {
+             if(settings.debug == false){
+                 canvasContext.save();
+                 canvasContext.drawImage(
+                     dail.imagePointB,
+                     dail.centerPointSeconds.x - 3,
+                     dail.centerPointSeconds.y - 3,
+                     6,
+                     6
+                 );
+                 canvasContext.restore();
+             }
+         }
+
+         function drawHoursHand(date)
+         {
+             var hourAngle = date.getHours()/12 * (Math.PI*2);
+             var minutesAngle = date.getMinutes()/(12*60) * (Math.PI*2);
+             var secondsAngle = date.getSeconds()/(12*60*60) * (Math.PI*2);
+
+             canvasContext.save();
+             canvasContext.translate(dail.centerPointHours.x, dail.centerPointHours.y);
+             canvasContext.rotate(hourAngle + minutesAngle + secondsAngle);
+             canvasContext.drawImage(
+                 hourHand.image,
+                 -hourHand.centerPoint.x,
+                 -hourHand.centerPoint.y,
+                 hourHand.width,
+                 hourHand.height
+             );
+
+             if(settings.debug){
+                 canvasContext.fillStyle = 'blue';
+                 canvasContext.fillRect(0, 0, 1, 1);
+             }
+
+             canvasContext.restore();
+         }
+
+         function drawMinutesHand(date)
+         {
+             var minutesAngle = date.getMinutes()/60 * (Math.PI*2);
+
+             canvasContext.save();
+             canvasContext.translate(dail.centerPointMinutes.x, dail.centerPointMinutes.y);
+             canvasContext.rotate(minutesAngle);
+             canvasContext.drawImage(
+                 minuteHand.image,
+                 -minuteHand.centerPoint.x,
+                 -minuteHand.centerPoint.y,
+                 minuteHand.width,
+                 minuteHand.height
+             );
+
+             if(settings.debug){
+                 canvasContext.fillStyle = 'red';
+                 canvasContext.fillRect(0, 0, 1, 1);
+             }
+
+             canvasContext.restore();
+         }
+
+         function drawSecondsHand(date)
+         {
+             var secondsAngle = date.getSeconds()/60 * (Math.PI*2);
+
+             canvasContext.save();
+             canvasContext.translate(dail.centerPointSeconds.x, dail.centerPointSeconds.y);
+             canvasContext.rotate(secondsAngle);
+             canvasContext.drawImage(
+                 secondHand.image,
+                 -secondHand.centerPoint.x,
+                 -secondHand.centerPoint.y,
+                 secondHand.width,
+                 secondHand.height
+             );
+
+             if(settings.debug){
+                 canvasContext.fillStyle = 'green';
+                 canvasContext.fillRect(0, 0, 1, 1);
+             }
+
+             canvasContext.restore();
+         }
+
+         // update
+         setInterval(function() {
+
+             var date = new Date();
+
+             drawDail();
+             drawSecondsHand(date);
+             drawPointB();
+             drawHoursHand(date);
+             drawMinutesHand(date);
+             drawPointA();
+
+         }, settings.updateInterval);
+
+        </script>
+    </body>
+
+</html>
