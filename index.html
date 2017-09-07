@@ -4,15 +4,9 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!--IE compatibility mode setting-->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Canvas Watch Example</title>
+        <title>HTML5 Canvas Watch Banner</title>
 
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-            <script src="public/js/indexIE.bundle.js"></script>
-        <![endif]-->
         <style>
 
          body {
@@ -33,7 +27,7 @@
     <body>
 
         <div id="box" >
-            <canvas id="watch-canvas" width="300" height="300" style="border:1px solid #000000;"></canvas>
+            <canvas id="clock-canvas" width="300" height="300" style="border:1px solid #000000;"></canvas>
             <div style="display:none;">
                 <img id="dial" src="assets/dial.png" width="300" height="300">
                 <img id="dial-point-a" src="assets/dial-point-a.png" width="50" height="50">
@@ -53,7 +47,7 @@
          var settings = {
              debug: false,
              updateInterval: 1000,
-             canvas: document.getElementById("watch-canvas")
+             canvas: document.getElementById("clock-canvas")
          };
 
          var canvasContext = settings.canvas.getContext("2d");

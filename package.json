@@ -1,7 +1,7 @@
 {
-    "name": "canvas-watch-banner",
+    "name": "canvas-clock-banner",
     "version": "1.0.0",
-    "description": "HTML5 canvas based watch banner",
+    "description": "HTML5 canvas based clock banner",
     "main": "index.js",
     "scripts": {
         "start": "live-server ./",
